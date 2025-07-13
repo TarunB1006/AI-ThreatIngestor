@@ -1,0 +1,42 @@
+# file extensions
+*.ini
+*.py[cdo]
+*.err
+*.log
+*.egg-info/
+*.sqlite3
+*.db
+config.yml
+test*.yml
+
+# dev sources
+.virtualenv
+env/
+build/
+dist/
+
+# coverage
+cover/
+coverage.xml
+.coverage
+
+# Sphinx documentation
+docs/_build/
+
+# Local
+.DS_Store
+.vscode/
+
+.venv/
+.github/workflows/
+/logs
+/docs/
+
+pycache/
+__pycache__/
+*.pyc
+*.pyo
+.github/workflows/
+*.swp
+*.swo
+*.bak

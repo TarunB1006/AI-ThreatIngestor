@@ -1,0 +1,60 @@
+# AI-Enhanced ThreatIngestor .dockerignore
+
+# Git and version control
+.git/
+.github/
+.gitignore
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Database files (will be created in container)
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Development and testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Documentation build
+docs/_build/
+
+# Temporary files
+*.tmp
+temp/
+
+# Docker files (don't copy docker files into container)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Large data files
+*.csv
+*.json
+data/
+
+# Backup files
+*_backup.py
+*_fixed.py

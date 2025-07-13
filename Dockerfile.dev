@@ -1,0 +1,97 @@
+# AI-Enhanced ThreatIngestor Development Dockerfile
+# Updated for Python 3.11+ with AI capabilities, testing, and development tools
+FROM ubuntu:22.04
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
+ENV OLLAMA_HOST=0.0.0.0
+ENV DEVELOPMENT=1
+
+# Install system dependencies including development tools
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3.11-pip \
+    python3.11-dev \
+    python3.11-venv \
+    sqlite3 \
+    tesseract-ocr \
+    python3-lxml \
+    git \
+    curl \
+    wget \
+    build-essential \
+    vim \
+    nano \
+    htop \
+    tree \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Copy requirements for better caching
+COPY requirements-hackathon.txt .
+COPY requirements.txt .
+COPY requirements-testing.txt .
+
+# Install Python dependencies (including testing and development)
+RUN python3.11 -m pip install --upgrade pip
+RUN python3.11 -m pip install -r requirements-hackathon.txt
+RUN python3.11 -m pip install -r requirements.txt
+RUN python3.11 -m pip install -r requirements-testing.txt
+RUN python3.11 -m pip install opencv-python pytesseract numpy
+
+# Install additional development tools
+RUN python3.11 -m pip install \
+    ipython \
+    jupyter \
+    black \
+    flake8 \
+    pytest \
+    pytest-cov \
+    mypy
+
+# Install Ollama (for AI capabilities)
+RUN curl -fsSL https://ollama.ai/install.sh | sh
+
+# Copy application code
+COPY app/ ./app/
+COPY threatingestor/ ./threatingestor/
+COPY simple_dashboard.py .
+COPY populate_db.py .
+COPY setup-ai.sh .
+COPY *.md ./
+COPY *.yml ./
+COPY *.yaml ./
+
+# Create necessary directories
+RUN mkdir -p logs data tests
+
+# Copy test files (optional - will be mounted in development)
+# Tests can be mounted as volume: -v ./tests:/app/tests
+
+# Make scripts executable
+RUN chmod +x setup-ai.sh
+
+# Initialize database
+RUN python3.11 populate_db.py
+
+# Install the package in development mode
+RUN python3.11 -m pip install -e .
+
+# Expose ports (dashboard, ollama, jupyter)
+EXPOSE 7862 11434 8888
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:7862/ || exit 1
+
+# Development entrypoint
+COPY docker-entrypoint-dev.sh /entrypoint-dev.sh
+RUN chmod +x /entrypoint-dev.sh
+
+# Default to development mode
+ENTRYPOINT ["/entrypoint-dev.sh"]
+CMD ["dashboard"]

@@ -1,0 +1,197 @@
+# This example config file shows some of the features available in ThreatIngestor.
+# It will not run as-is, since it's missing credentials and several of the
+# plugins point to services you probably don't have.
+# See the ThreatIngestor documentation for more information on how to create
+# a real config.yml: https://inquest.readthedocs.io/projects/threatingestor/en/latest/.
+
+general:
+    # You always need this section!
+    # Here are some sane values to include:
+    daemon: true
+    sleep: 900
+    state_path: state.db
+
+credentials:
+    # This section is optional. Use it to define credentials to reference below
+    # in the source and operator sections.
+  - name: twitter-auth
+    # https://dev.twitter.com/oauth/overview/application-owner-access-tokens
+    api_key:
+    api_secret_key:
+    access_token:
+    access_token_secret:
+    bearer_token:
+
+  - name: virustotal-auth
+    api_key: API_KEY
+
+  - name: github-auth
+    username: user
+    # Could also use password instead https://github.blog/2013-05-16-personal-api-tokens/
+    # https://github.com/settings/tokens
+    token: TOKEN_OR_PASSWORD
+
+  - name: threatkb-auth
+    url: http://mythreatkb
+    token: MYTOKEN
+    secret_key: MYKEY
+
+  - name: aws-auth
+    aws_access_key_id: MY_KEY
+    aws_secret_access_key: MY_SECRET
+    aws_region: MY_REGION
+
+  - name: misp-auth
+    url: https://mymisp
+    key: MY_API_KEY
+    ssl: False
+
+error_reporting:
+  - name: bugsnag
+    api_key: API_KEY
+
+sources:
+    # This section defines each of the input sources for ThreatIngestor.
+    # Define as many as you want. ThreatIngestor maintains a "state" for each of
+    # your sources, which helps pull in only new content since the last run.
+  - name: twitter-inquest-c2-list
+    module: twitter
+    credentials: twitter-auth
+    list_id: 917864294053752832
+
+  - name: twitter-open-directory
+    module: twitter
+    credentials: twitter-auth
+    query: '"open directory" #malware'
+
+  - name: twitter-inquest-timeline
+    module: twitter
+    credentials: twitter-auth
+    username: InQuest
+
+  - name: github-query
+    module: github
+    credentials: github-auth
+    search: CVE-2018-
+
+  # Without regex include
+  - name: rss-inquest-blog
+    module: rss
+    url: https://inquest.net/blog/rss
+    feed_type: messy
+
+  # With regex include
+  # Keywords are seperated by '|'
+  - name: rss-inquest-blog
+    module: rss
+    url: https://inquest.net/blog/rss
+    feed_type: messy
+    include: security|threat|research
+
+  # With regex exclude
+  # Keywords are seperated by '|'
+  - name: rss-inquest-blog
+    module: rss
+    url: https://inquest.net/blog/rss
+    feed_type: messy
+    exclude: https:\/.inquest\.net\/blog[\/]?inquest-[\/]?
+
+  # Sitemap exmaples
+
+  # Keywords are seperated by '|' when using the include option
+  - name: inquest-sitemap-articles
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    include: security|threat|research
+
+  # Keywords are seperated by '|' when using the exclude option
+  - name: inquest-sitemap-articles
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    exclude: https:\/.inquest\.net\/blog[\/]?inquest-[\/]?
+
+  # Defaults to "blog" keyword
+  - name: inquest-sitemap-blog
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+
+  # Searches for "articles or security" keywords
+  - name: inquest-sitemap-blog-articles-security
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    include: articles|security
+
+  # Only ingest from specific directories
+  - name: inquest-sitemap-blog-category
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    path: /blog/category/
+
+  # Specify filtering for paths
+  # Only returns results under /blog/category/release|solutions
+  - name: inquest-sitemap-release-solutions
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    path: /blog/category/
+    include: release|solutions
+
+  - name: vt-comments-inquest
+    module: virustotal
+    user: 'inquest.labs'
+    credentials: virustotal-auth
+    limit: 10
+
+  - name: image-extraction
+    module: image
+    img: https://example.com/image.png
+
+  - name: beanstalk-input
+    module: beanstalk
+    host: 127.0.0.1
+    port: 11300
+    queue_name: threatingestor-input
+    paths: [content]
+
+operators:
+    # This section defines outputs for the information extracted from your
+    # sources. All filtering and flow control is done here, with options like
+    # "allowed_sources", "artifact_types", and "filter".
+  - name: csv
+    # Write artifacts to a CSV file
+    module: csv
+    filename: output.csv
+    
+  - name: mythreatkb
+    # Send artifacts to a ThreatKB instance
+    module: threatkb
+    credentials: threatkb-auth
+    allowed_sources: [twitter-inquest-c2-list, rss-.*]
+    state: Inbox
+
+  - name: beanstalk-output
+    module: beanstalk
+    host: 127.0.0.1
+    port: 11300
+    queue_name: my-queue-worker-input
+    artifact_types: [URL]
+    url: {url}
+
+  - name: inquest-threatcrawler
+    module: sqs
+    credentials: aws-auth
+    allowed_sources: [twitter-open-directory]
+    filter: is_domain
+    artifact_types: [URL]
+    queue_name: research-crawl-queue
+    domain: {domain}
+    url: {url}
+    source_type: url
+    download_path: /var/crawler/ingestor
+    source_type_tags: dir
+
+  - name: sqlite-db
+    module: sqlite
+    filename: artifacts.db
+
+  - name: misp-instance
+    module: misp

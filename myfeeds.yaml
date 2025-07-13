@@ -1,0 +1,265 @@
+# yamllint disable rule:line-length
+---
+general:
+  daemon: false   # Set to true for background looping
+  sleep: 3600     # 1 hour (only matters if daemon=true)
+  state_path: state.db
+
+sources:
+  - name: rss-ahnlab
+    module: rss
+    url: https://asec.ahnlab.com/en/feed/
+    feed_type: messy
+
+  - name: rss-cloudflare
+    module: rss
+    url: https://blog.cloudflare.com/tag/security/rss
+    feed_type: messy
+
+  - name: rss-eclecticiq
+    module: rss
+    url: https://blog.eclecticiq.com/rss.xml
+    feed_type: messy
+
+  - name: rss-eset
+    module: rss
+    url: https://blog.eset.com/feed
+    feed_type: messy
+
+  - name: rss-malwarebytes
+    module: rss
+    url: https://blog.malwarebytes.com/feed/
+    feed_type: messy
+
+  - name: rss-talos
+    module: rss
+    url: https://blog.talosintelligence.com/rss/
+    feed_type: messy
+
+  - name: rss-att
+    module: rss
+    url: https://cybersecurity.att.com/site/blog-all-rss
+    feed_type: messy
+
+  - name: rss-fortinet
+    module: rss
+    url: https://feeds.fortinet.com/fortinet/blog/threat-research
+    feed_type: messy
+
+  - name: rss-projectzero
+    module: rss
+    url: https://googleprojectzero.blogspot.com/feeds/posts/default
+    feed_type: messy
+
+  - name: rss-intezer
+    module: rss
+    url: https://intezer.com/blog/research/feed/
+    feed_type: messy
+
+  - name: rss-sans
+    module: rss
+    url: https://isc.sans.edu/rssfeed_full.xml
+    feed_type: messy
+
+  - name: rss-krebsonsecurity
+    module: rss
+    url: https://krebsonsecurity.com/feed/
+    feed_type: messy
+
+  - name: rss-naosec
+    module: rss
+    url: https://nao-sec.org/feed.xml
+    feed_type: messy
+
+  - name: rss-sophos
+    module: rss
+    url: https://news.sophos.com/feed/
+    feed_type: messy
+
+  - name: rss-sebdraven
+    module: rss
+    url: https://sebdraven.medium.com/feed
+    feed_type: messy
+
+  - name: rss-securelist
+    module: rss
+    url: https://securelist.com/feed/
+    feed_type: messy
+
+  - name: rss-securityaffairs
+    module: rss
+    url: https://securityaffairs.co//feed
+    feed_type: messy
+
+  - name: rss-securityintel
+    module: rss
+    url: https://securityintelligence.com/feed/
+    feed_type: messy
+
+  - name: rss-broadcom
+    module: rss
+    url: https://sed-cms.broadcom.com/rss/v1/blogs/rss.xml
+    feed_type: messy
+
+  - name: rss-sensepost
+    module: rss
+    url: https://sensepost.com/rss.xml
+    feed_type: messy
+
+  - name: rss-socprime
+    module: rss
+    url: https://socprime.com/feed/
+    feed_type: messy
+
+  - name: rss-cyberwire
+    module: rss
+    url: https://thecyberwire.com/feeds/rss.xml
+    feed_type: messy
+
+  - name: rss-hackernews
+    module: rss
+    url: https://thehackernews.com/feeds/posts/default
+    feed_type: messy
+
+  - name: rss-therecord
+    module: rss
+    url: https://therecord.media//feed
+    feed_type: messy
+
+  - name: rss-threatpost
+    module: rss
+    url: https://threatpost.com/feed/
+    feed_type: messy
+
+  - name: rss-unit42
+    module: rss
+    url: https://unit42.paloaltonetworks.com//feed
+    feed_type: messy
+
+  - name: rss-cisa-alerts
+    module: rss
+    url: https://us-cert.cisa.gov/ncas/alerts.xml
+    feed_type: messy
+
+  - name: rss-cisa-analysis
+    module: rss
+    url: https://us-cert.cisa.gov/ncas/analysis-reports.xml
+    feed_type: messy
+
+  - name: rss-cisa-activity
+    module: rss
+    url: https://us-cert.cisa.gov/ncas/current-activity.xml
+    feed_type: messy
+
+  - name: rss-bitdefender
+    module: rss
+    url: https://www.bitdefender.com/blog/api/rss/labs/
+    feed_type: messy
+
+  - name: rss-ics-advisories
+    module: rss
+    url: https://www.cisa.gov/cybersecurity-advisories/ics-advisories.xml
+    feed_type: messy
+
+  - name: rss-ics-medical
+    module: rss
+    url: https://www.cisa.gov/cybersecurity-advisories/ics-medical-advisories.xml
+    feed_type: messy
+
+  - name: rss-crowdstrike
+    module: rss
+    url: https://www.crowdstrike.com/blog/feed
+    feed_type: messy
+
+  - name: rss-darknet
+    module: rss
+    url: https://www.darknet.org.uk/feed/
+    feed_type: messy
+
+  - name: rss-databreach
+    module: rss
+    url: https://www.databreachtoday.com/rss-feeds
+    feed_type: messy
+
+  - name: rss-govtech
+    module: rss
+    url: https://www.govtech.com/blogs/lohrmann-on-cybersecurity.rss
+    feed_type: messy
+
+  - name: rss-cluley
+    module: rss
+    url: https://www.grahamcluley.com/feed/
+    feed_type: messy
+
+  - name: rss-hackerone
+    module: rss
+    url: https://www.hackerone.com/blog.rss
+    feed_type: messy
+
+  - name: rss-hackmageddon
+    module: rss
+    url: https://www.hackmageddon.com/feed/
+    feed_type: messy
+
+  - name: rss-infosec-mag
+    module: rss
+    url: https://www.infosecurity-magazine.com/rss/news/
+    feed_type: messy
+
+  - name: rss-justice
+    module: rss
+    url: https://www.justice.gov/news/rss?f[0]=facet_topics:3911
+    feed_type: messy
+
+  - name: rss-microsoft
+    module: rss
+    url: https://www.microsoft.com/en-us/security/blog/feed/
+    feed_type: messy
+
+  - name: rss-nist
+    module: rss
+    url: https://www.nist.gov/blogs/cybersecurity-insights/rss.xml
+    feed_type: messy
+
+  - name: rss-proofpoint
+    module: rss
+    url: https://www.proofpoint.com/us/blog
+    feed_type: messy
+
+  - name: rss-recordedfuture
+    module: rss
+    url: https://www.recordedfuture.com/feed
+    feed_type: messy
+
+  - name: rss-schneier
+    module: rss
+    url: https://www.schneier.com/blog/atom.xml
+    feed_type: messy
+
+  - name: rss-sentinelone
+    module: rss
+    url: https://www.sentinelone.com/feed/
+    feed_type: messy
+
+  - name: rss-techrepublic
+    module: rss
+    url: https://www.techrepublic.com/rssfeeds/topic/security/
+    feed_type: messy
+
+  - name: rss-guardian
+    module: rss
+    url: https://www.theguardian.com/technology/data-computer-security/rss
+    feed_type: messy
+
+  - name: rss-troyhunt
+    module: rss
+    url: https://www.troyhunt.com/rss/
+    feed_type: messy
+
+operators:
+  - name: csv-output
+    module: csv
+    filename: threat_iocs.csv
+
+outputs:
+  - type: stdout
