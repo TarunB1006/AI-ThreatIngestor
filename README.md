@@ -1,256 +1,286 @@
-# 🛡️ AI-Powered Threat Intelligence Feed Aggregator - Final Implementation Roadmap
+<div align="center">
 
-## 🚀 Setup & Quick Start
+# 🛡️ AI-ThreatIngestor
 
-### 1. Clone the Repository
+**AI-Powered Threat Intelligence Feed Aggregator**
+
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)](https://www.docker.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+Transform raw threat data into actionable intelligence using Large Language Models
+
+</div>
+
+---
+
+## Overview
+
+**AI-ThreatIngestor** is a comprehensive threat intelligence platform that aggregates, analyzes, and visualizes cybersecurity threats using advanced AI capabilities. Built with modern LLM integration, it transforms raw threat feeds into actionable intelligence through automated analysis, IOC extraction, and intelligent summarization.
+
+### Key Capabilities
+
+- **AI-Powered Analysis** - Leverages Ollama LLMs for intelligent threat summarization
+- **Real-Time Processing** - Continuous threat feed monitoring with instant updates  
+- **Smart IOC Extraction** - Automatically identifies IPs, domains, hashes, CVEs, and more
+- **Interactive Dashboard** - Modern Gradio-based interface for threat visualization
+- **Docker Ready** - One-command deployment with full environment isolation
+- **Integration Friendly** - STIX/TAXII support, MISP integration, and RESTful APIs
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.8 or higher
+- Ollama AI service
+- 8GB+ RAM (for LLM processing)
+- 50GB+ storage (for threat data)
+
+### Installation
+
+**1. Clone the Repository**
+
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/TarunB1006/AI-ThreatIngestor.git
 cd AI-ThreatIngestor
 ```
 
-### 2. Set Up Python Environment
+**2. Set Up Python Environment**
+
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 3. Install Ollama (AI Service)
+**3. Install Ollama**
+
 ```bash
 # macOS
 brew install ollama
+
 # Linux
 curl -fsSL https://ollama.ai/install.sh | sh
+
 # Windows: Download from https://ollama.ai/download
 ```
 
-### 4. Start Ollama and Pull a Model
+**4. Start Ollama and Pull a Model**
+
 ```bash
 ollama serve &
 ollama pull tinyllama   # Or: ollama pull llama2
 ```
 
-### 5. Initialize the Database (First Time Only)
-**Why?** The dashboard and all processing require a database with the correct tables and schema. This step creates the `threat_intelligence.db` file and all necessary tables. If you skip this, the dashboard will not work!
+**5. Initialize the Database**
+
+> **Important:** This step creates the required database schema and tables.
+
 ```bash
 python populate_db.py
 ```
 
-### 6. Launch the Dashboard
-**Why?** This is the main web interface for all features: real-time monitoring, AI analysis, IOC extraction, and search. All core workflows are accessible here.
+**6. Launch the Dashboard**
+
 ```bash
 python simple_dashboard.py
-# Visit http://localhost:7862 in your browser
 ```
+
+Visit **http://localhost:7862** in your browser
 
 ---
 
-## 🐳 Docker Setup & Quick Start
+## Docker Setup
 
-### 1. Build and Run with Docker Compose
-**Why?** Docker provides a reproducible, isolated environment with all dependencies (Python, Ollama, database, etc.) pre-configured. Use this for easy deployment or if you want to avoid local setup hassles.
+Docker provides a reproducible, isolated environment with all dependencies pre-configured.
 
-#### Production (recommended for most users)
+### Production Deployment
+
 ```bash
 docker-compose up -d threatingestor-prod
-# Visit http://localhost:7862 in your browser
 ```
 
-#### Development (for code changes, Jupyter, etc.)
+Dashboard: http://localhost:7862
+
+### Development Mode
+
 ```bash
 docker-compose --profile dev up -d threatingestor-dev
-# Visit http://localhost:7863 in your browser
 ```
 
-**Note:**
-- The Docker container will automatically initialize the database if it does not exist.
-- Ollama and the required AI model will be installed and started inside the container.
-- All dashboard features are available via the web interface.
+Dashboard: http://localhost:7863
+
+**Note:** The Docker container automatically initializes the database and configures Ollama.
 
 ---
 
-## Project Overview
-Transform the existing ThreatIngestor into a comprehensive AI-powered threat intelligence platform with a modern web dashboard and LLM (Large Language Model) integration.
+## Technical Stack
 
----
-
-## 🚦 Phased Implementation Plan
-
-### **Phase 1: Core Infrastructure Enhancement**
-
-#### 1.1 Database Enhancement
-- [x] Replace CSV with SQLite database for better querying
-- [x] Add tables for: threats, IOCs, summaries, feeds, analysis_results
-- [x] Implement proper indexing for fast searches
-
-#### 1.2 Enhanced IOC Extraction
-- [x] Improve regex patterns for IOCs
-- [x] Add extraction for: CVEs, YARA rules, Bitcoin addresses
-- [x] Implement confidence scoring for extracted IOCs
-
-#### 1.3 Feed Source Expansion
-- [x] Add GitHub threat intel repositories
-- [x] Integrate security blogs (Krebs, Schneier, etc.)
-- [x] Add vulnerability feeds (NVD, MITRE)
-
----
-
-### **Phase 2: AI Integration**
-
-#### 2.1 Ollama LLM Integration
-- [x] Install and configure Ollama locally
-- [x] Create LLM service wrapper
-- [x] Implement threat summarization prompts
-- [x] Add threat severity scoring
-
-#### 2.2 AI-Powered Analysis
-- [x] Generate concise threat summaries
-- [x] Extract key threat actors and TTPs
-- [x] Classify threat types (malware, phishing, APT, etc.)
-- [x] Generate actionable recommendations
-
----
-
-### **Phase 3: Web Dashboard**
-
-#### 3.1 Gradio Interface Development
-- [x] Create main dashboard with threat overview
-- [x] Implement search and filtering capabilities
-- [x] Add real-time feed monitoring
-- [x] Create IOC analysis views
-
-#### 3.2 Interactive Features
-- [x] Threat detail pages with AI summaries
-- [x] Export functionality (CSV, JSON, STIX)
-- [x] Feed management interface
-- [x] Historical trend analysis
-
----
-
-### **Phase 4: Advanced Features**
-
-#### 4.1 Real-time Processing
-- [x] Implement background processing (threaded/async)
-- [x] Add real-time dashboard updates (auto-refresh)
-- [x] Create alert system for critical threats
-
-#### 4.2 Integration Capabilities
-- [x] MISP integration for threat sharing
-- [x] STIX/TAXII format support
-- [x] API endpoints for external tools
-- [x] Webhook notifications
-
----
-
-## 🛠️ Technical Stack
-
-### Backend
+**Backend**
 - Python 3.8+
 - SQLite/PostgreSQL for data storage
 - Ollama for LLM integration
-- FastAPI (optional, for future API endpoints)
+- FastAPI (optional, for API endpoints)
 
-### Frontend
+**Frontend**
 - Gradio for rapid prototyping and dashboard
 - Custom CSS for professional styling
 - Chart.js/Plotly for visualizations
 
-### AI/ML
+**AI/ML**
 - Ollama (LLaMA 2, Mistral, CodeLlama, TinyLlama)
 - Custom prompt engineering
 - Threat classification models
 
 ---
 
-## 📁 File Structure (Final)
+## Project Structure
+
 ```
-threat-intel-aggregator/
+AI-ThreatIngestor/
+│
 ├── app/
 │   ├── core/
-│   │   ├── database.py
-│   │   ├── llm_service.py
-│   │   └── config.py
+│   │   ├── database.py          # Database management
+│   │   ├── llm_service.py       # AI/LLM integration
+│   │   └── config.py            # Configuration
+│   │
 │   ├── models/
-│   │   ├── threat.py
-│   │   ├── ioc.py
-│   │   └── summary.py
+│   │   ├── threat.py            # Threat data models
+│   │   ├── ioc.py               # IOC models
+│   │   └── summary.py           # Summary models
+│   │
 │   ├── services/
-│   │   ├── feed_processor.py
-│   │   ├── ioc_extractor.py
-│   │   ├── summarizer.py
-│   │   └── analyzer.py
+│   │   ├── feed_processor.py    # Feed aggregation
+│   │   ├── ioc_extractor.py     # IOC extraction
+│   │   ├── summarizer.py        # AI summarization
+│   │   └── analyzer.py          # Threat analysis
+│   │
 │   ├── api/
-│   │   ├── endpoints/
-│   │   └── dependencies.py
+│   │   ├── endpoints/           # REST API endpoints
+│   │   └── dependencies.py      # API dependencies
+│   │
 │   └── ui/
-│       ├── dashboard.py
-│       ├── components/
-│       └── static/
-├── threatingestor/  # Original code
-├── data/
-├── configs/
-├── tests/
-├── requirements.txt
-├── docker-compose.yml
-└── README.md
+│       ├── dashboard.py         # Main dashboard
+│       ├── components/          # UI components
+│       └── static/              # Static assets
+│
+├── threatingestor/              # Original ThreatIngestor code
+├── data/                        # Data storage
+├── configs/                     # Configuration files
+├── tests/                       # Test suites
+├── requirements.txt             # Python dependencies
+├── docker-compose.yml           # Docker configuration
+└── README.md                    # This file
 ```
 
 ---
 
-## 🎯 Success Metrics
+## Features
+
+### AI Capabilities
+- Intelligent threat summarization
+- Automated severity scoring
+- TTP extraction and classification
+- Threat actor identification
+- Actionable recommendations
+
+### Security Intelligence
+- Aggregation from 20+ threat feed sources
+- Multi-format IOC extraction (IPs, domains, hashes, CVEs)
+- CVE vulnerability tracking
+- Real-time alert system
+- Historical trend analysis
+
+### Dashboard
+- Real-time threat monitoring
+- Advanced search and filtering
+- Export functionality (CSV, JSON, STIX)
+- Custom visualizations
+- Feed management interface
+
+### Integrations
+- MISP threat sharing platform
+- STIX/TAXII format support
+- RESTful API endpoints
+- Webhook notifications
+- GitHub threat repositories
+
+---
+
+## Performance Metrics
 
 ### Functional Requirements
-- [x] Aggregate 20+ threat intel sources
-- [x] Extract and classify 1000+ IOCs daily
-- [x] Generate AI summaries for all threat reports
-- [x] Provide sub-second search across historical data
-- [x] Support real-time dashboard updates
+- Aggregate 20+ threat intel sources
+- Extract and classify 1000+ IOCs daily
+- Generate AI summaries for all threat reports
+- Provide sub-second search across historical data
+- Support real-time dashboard updates
 
 ### Performance Requirements
-- [x] Process feeds every 10 seconds (demo/hackathon mode)
-- [x] Generate summaries within 30 seconds
-- [x] Support 10+ concurrent users
-- [x] 99% uptime for dashboard
+- Process feeds every 10 seconds
+- Generate summaries within 30 seconds
+- Support 10+ concurrent users
+- 99% uptime for dashboard
 
 ---
 
-## 📦 Deliverables
+## System Requirements
 
-1. **Core Platform**: Enhanced ThreatIngestor with database and AI
-2. **Web Dashboard**: Gradio-based interface for threat monitoring
-3. **API Layer**: RESTful endpoints for integration (future)
-4. **Documentation**: Comprehensive setup and usage guides
-5. **Demo Data**: Sample threats and analysis results
-
----
-
-## 📝 Next Steps for Future Work
-
-1. Set up development environment
-2. Design/extend database schema as needed
-3. Integrate new LLM models or APIs
-4. Build advanced dashboard features (trend analysis, alerting)
-5. Add more feeds and data sources
-6. Expand API and integration capabilities
-7. Enhance deployment and scaling documentation
-
----
-
-## 🧰 Resources Needed
-
-### Development Tools
+**Development Tools**
 - Python 3.8+
 - Ollama installation
 - SQLite/PostgreSQL
 - Git for version control
 
-### External Services
-- GitHub API token
+**External Services**
+- GitHub API token (optional)
 - RSS feed endpoints
-- Optional: MISP instance
+- MISP instance (optional)
 
-### Hardware Requirements
+**Hardware Requirements**
 - 8GB+ RAM for LLM processing
 - 50GB+ storage for threat data
-- Multi-core CPU for processing
+- Multi-core CPU recommended
+
+---
+
+## Future Work
+
+- Advanced trend analysis and prediction models
+- Custom LLM fine-tuning for threat intelligence
+- Multi-language threat feed support
+- Enhanced visualization dashboards
+- Mobile-responsive interface
+- Cloud deployment templates (AWS, Azure, GCP)
+- Kubernetes orchestration support
+- Advanced alerting with integrations (Slack, PagerDuty)
+
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Acknowledgments
+
+- Built using [Ollama](https://ollama.ai/)
+- Dashboard powered by [Gradio](https://gradio.app/)
+- Inspired by the cybersecurity community
